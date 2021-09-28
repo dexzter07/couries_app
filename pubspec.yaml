@@ -1,0 +1,44 @@
+name: couries_one
+description: A new Flutter application.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  get: ^3.26.0
+  persistent_bottom_nav_bar: ^2.1.0
+  flutter_svg: ^0.18.0
+
+  cupertino_icons: ^1.0.0
+  geolocator:
+  geocoding:
+  google_maps_flutter:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/svgs/
+
+  fonts:
+    - family: PoppinsBold
+      fonts:
+        - asset: assets/fonts/poppins.ttf
+
+    - family: PoppinsRegular
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+
