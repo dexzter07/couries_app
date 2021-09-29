@@ -7,6 +7,7 @@ import 'package:couries_one/widgets/custom_app_bar.dart';
 import 'package:couries_one/widgets/custom_text_widget.dart';
 import 'package:couries_one/widgets/date_time_widget.dart';
 import 'package:couries_one/widgets/full_width_button.dart';
+import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,6 +20,10 @@ class AddDateTimeScreen extends StatefulWidget {
 }
 
 class _AddDateTimeScreenState extends State<AddDateTimeScreen> {
+  DateTime _selectedValue;
+  DateTime _selectedValue1;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,27 +49,30 @@ class _AddDateTimeScreenState extends State<AddDateTimeScreen> {
                     SizedBox(height: 15),
                     Row(
                       children: [
-                        CustomTextWidget("11 Feb 2021",style: CustomTextStyle.smallTextStyle1(color: Colors.grey),),
+                        CustomTextWidget(_selectedValue1!=null?"${_selectedValue1.day}/${_selectedValue1.month}/${_selectedValue1.year}":"Select Date",style: CustomTextStyle.smallTextStyle1(color: Colors.grey),),
                         Spacer(),
                         Icon(Icons.calendar_today,size: 20,color: Colors.grey,)
                       ],
                     ),
                     SizedBox(height: 20,),
 
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          DateTimeSingleWidget(date: "11",day: "Mon",selected: true,),
-                          DateTimeSingleWidget(date: "12",day: "Tue",selected: false,),
-                          DateTimeSingleWidget(date: "13",day: "Wed",selected: false,),
-                          DateTimeSingleWidget(date: "14",day: "Thrus",selected: false,),
-                          DateTimeSingleWidget(date: "15",day: "Wed",selected: false,),
-                          DateTimeSingleWidget(date: "16",day: "Fri",selected: false,),
-                          DateTimeSingleWidget(date: "17",day: "Sar",selected: false,),
-                          DateTimeSingleWidget(date: "18",day: "Sun",selected: false,),
-                        ],
-                      ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        DatePicker(
+                          DateTime.now(),
+                          initialSelectedDate: DateTime.now(),
+                          selectionColor: Colors.blue,
+                          selectedTextColor: Colors.white,
+                          onDateChange: (date) {
+                            // New date selected
+                            setState(() {
+                              _selectedValue1 = date;
+                              print(_selectedValue1);
+                            });
+                          },
+                        ),
+                      ],
                     ),
                     SizedBox(height: 20,),
 
@@ -83,27 +91,30 @@ class _AddDateTimeScreenState extends State<AddDateTimeScreen> {
                     SizedBox(height: 15),
                     Row(
                       children: [
-                        CustomTextWidget("11 Feb 2021",style: CustomTextStyle.smallTextStyle1(color: Colors.grey),),
+                        CustomTextWidget(_selectedValue!=null?"${_selectedValue.day}/${_selectedValue.month}/${_selectedValue.year}":"Select Date",style: CustomTextStyle.smallTextStyle1(color: Colors.grey),),
                         Spacer(),
                         Icon(Icons.calendar_today,size: 20,color: Colors.grey,)
                       ],
                     ),
                     SizedBox(height: 20,),
 
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          DateTimeSingleWidget(date: "11",day: "Mon",selected: false,),
-                          DateTimeSingleWidget(date: "12",day: "Tue",selected: false,),
-                          DateTimeSingleWidget(date: "13",day: "Wed",selected: true,),
-                          DateTimeSingleWidget(date: "14",day: "Thrus",selected: false,),
-                          DateTimeSingleWidget(date: "15",day: "Wed",selected: false,),
-                          DateTimeSingleWidget(date: "16",day: "Fri",selected: false,),
-                          DateTimeSingleWidget(date: "17",day: "Sar",selected: false,),
-                          DateTimeSingleWidget(date: "18",day: "Sun",selected: false,),
-                        ],
-                      ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        DatePicker(
+                          DateTime.now(),
+                          initialSelectedDate: DateTime.now(),
+                          selectionColor: Colors.blue,
+                          selectedTextColor: Colors.white,
+                          onDateChange: (date) {
+                            // New date selected
+                            setState(() {
+                              _selectedValue = date;
+                              print(_selectedValue);
+                            });
+                          },
+                        ),
+                      ],
                     ),
                     SizedBox(height: 20,),
 

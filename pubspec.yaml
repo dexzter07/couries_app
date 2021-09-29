@@ -19,6 +19,7 @@ dependencies:
   geolocator:
   geocoding:
   google_maps_flutter:
+  date_picker_timeline:
 
 dev_dependencies:
   flutter_test:

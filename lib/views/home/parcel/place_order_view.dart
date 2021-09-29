@@ -23,6 +23,7 @@ class PlaceOrderScreen extends StatefulWidget {
 class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
   final GlobalKey<ScaffoldState> _globalKey2 = GlobalKey<ScaffoldState>();
   bool title = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -230,7 +231,7 @@ class _LocationStackState extends State<LocationStack> {
         Column(
           children: [
             CustomAddlocationWidget(location: widget.address, address1:widget.address1),
-            CustomAddlocationWidget1(location: widget.address1,address:widget.address),
+            CustomAddlocationWidget1(location1: widget.address1,address:widget.address),
           ],
         ),
         Positioned(
@@ -251,6 +252,7 @@ class CustomAddlocationWidget extends StatelessWidget {
   final String location;
   String address;
   String address1;
+  int index = 0;
 
   CustomAddlocationWidget({this.location,this.address,this.address1});
 
@@ -275,7 +277,7 @@ class CustomAddlocationWidget extends StatelessWidget {
           ),
           CustomInkWell(
             onTap: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddLocationScreen(destination:address1)));
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddLocationScreen(destination:address1,index:index=1)));
               },
             child: Container(
               decoration: BoxDecoration(shape: BoxShape.circle,color: AppColors.PrimaryColor),
@@ -290,11 +292,11 @@ class CustomAddlocationWidget extends StatelessWidget {
 }
 
 class CustomAddlocationWidget1 extends StatelessWidget {
-  final String location;
+  final String location1;
   String address1;
   String address;
-
-  CustomAddlocationWidget1({this.location,this.address1,this.address});
+  int index = 0;
+  CustomAddlocationWidget1({this.location1,this.address1,this.address});
   @override
   Widget build(BuildContext context) {
     return   Container(
@@ -311,10 +313,10 @@ class CustomAddlocationWidget1 extends StatelessWidget {
         children: [
           Icon(Icons.circle,color: Colors.red,size: 20,),
           SizedBox(width: 10,),
-          Expanded(child:CustomTextWidget(location!=null?location:"Add Location",style: CustomTextStyle.smallTextStyle1(),)),
+          Expanded(child:CustomTextWidget(location1!=null?location1:"Add Location",style: CustomTextStyle.smallTextStyle1(),)),
           CustomInkWell(
             onTap: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => DestinationLocation(pickup:address)));
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddLocationScreen(destination:address,index:index)));
             },
             child: Container(
               decoration: BoxDecoration(shape: BoxShape.circle,color: AppColors.PrimaryColor),

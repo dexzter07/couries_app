@@ -1,6 +1,7 @@
 import 'package:couries_one/configs/constants/app_constants.dart';
 import 'package:couries_one/configs/styles/app_colors.dart';
 import 'package:couries_one/configs/styles/app_decor.dart';
+import 'package:couries_one/controllers/location/location_controller.dart';
 import 'package:couries_one/views/home/parcel/place_order_view.dart';
 import 'package:couries_one/widgets/custom_app_bar.dart';
 import 'package:couries_one/widgets/custom_text_field.dart';
@@ -14,13 +15,15 @@ import 'package:geocoding/geocoding.dart';
 
 class AddLocationScreen extends StatefulWidget {
   String destination;
-  AddLocationScreen({this.destination});
+  int index;
+  AddLocationScreen({this.destination, this.index});
   @override
   _AddLocationScreenState createState() => _AddLocationScreenState();
 }
 
 class _AddLocationScreenState extends State<AddLocationScreen> {
-
+  GoogleMapController _mapController;
+  String searchAddr;
   String location;
   String address;
   List<Marker> myMarker = [];
@@ -87,10 +90,15 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.search,size: 20,),
+                    IconButton(icon: Icon(Icons.search,size: 20,),
+                    onPressed: searchandNavigate,
+
+                    ),
                     SizedBox(width: 10,),
-                    Expanded(child: CustomTextField1(
-                      hintText: "Search Location",
+                    Expanded(child: TextField(
+                      onChanged: (val){
+                        searchAddr = val;
+                      },
                     ))
                   ],
                 )
@@ -107,7 +115,9 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
                   children: [
                     ClipRRect(
                       borderRadius:BorderRadius.only(topLeft: Radius.circular(40),),
-                      child: GoogleMap(initialCameraPosition: CameraPosition(
+                      child: GoogleMap(
+                        onMapCreated: onMapCreated,
+                        initialCameraPosition: CameraPosition(
                         target: LatLng(22.5448131, 88.3403691),
                         zoom: 15,
 
@@ -126,7 +136,12 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
                           noCurve: true,
                       text: "Add Location",
                       onTap: (){
-                        Navigator.push(context,MaterialPageRoute(builder: (context) => PlaceOrderScreen(address:address,address1: widget.destination,)));
+                            if (widget.index == 1){
+                              Navigator.push(context,MaterialPageRoute(builder: (context) => PlaceOrderScreen(address:address,address1: widget.destination,)));
+                            }
+                            else{
+                              Navigator.push(context,MaterialPageRoute(builder: (context) => PlaceOrderScreen(address:widget.destination,address1: address,)));
+                            }
                       },
                     ))
                   ],
@@ -142,6 +157,22 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
     )
     );
   }
+
+  searchandNavigate() {
+    locationFromAddress(searchAddr).then((result) {
+      _mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target: LatLng(result[0].latitude, result[0].longitude),
+        zoom: 17,
+      )));
+    });
+  }
+
+  void onMapCreated (controller){
+    setState(() {
+      _mapController = controller;
+    });
+  }
+
   _handleTap(LatLng tappedPoint)async{
     location = 'Lat: ${tappedPoint.latitude}, Long: ${tappedPoint.longitude}';
     GetAddressFromLatLong(tappedPoint);

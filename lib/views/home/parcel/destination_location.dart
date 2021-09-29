@@ -20,7 +20,8 @@ class DestinationLocation extends StatefulWidget {
 }
 
 class _DestinationLocationState extends State<DestinationLocation> {
-
+  GoogleMapController _mapController;
+  String searchAddr;
   String location;
   String address;
   List<Marker> myMarker = [];
@@ -87,10 +88,15 @@ class _DestinationLocationState extends State<DestinationLocation> {
                     ),
                     child: Row(
                       children: [
-                        Icon(Icons.search,size: 20,),
+                        IconButton(icon: Icon(Icons.search,size: 20,),
+                          onPressed: searchAndNavigate,
+
+                        ),
                         SizedBox(width: 10,),
-                        Expanded(child: CustomTextField1(
-                          hintText: "Search Location",
+                        Expanded(child: TextField(
+                          onChanged: (val){
+                            searchAddr = val;
+                          },
                         ))
                       ],
                     )
@@ -141,6 +147,20 @@ class _DestinationLocationState extends State<DestinationLocation> {
           ),
         )
     );
+  }
+  searchAndNavigate() {
+    locationFromAddress(searchAddr).then((result) {
+      _mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target: LatLng(result[0].latitude, result[0].longitude),
+        zoom: 10,
+      )));
+    });
+  }
+
+  void onMapCreated (controller){
+    setState(() {
+      _mapController = controller;
+    });
   }
   _handleTap(LatLng tappedPoint)async{
     location = 'Lat: ${tappedPoint.latitude}, Long: ${tappedPoint.longitude}';
