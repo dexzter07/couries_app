@@ -10,7 +10,14 @@ import 'package:couries_one/widgets/full_width_button.dart';
 import 'package:flutter/material.dart';
 
 
-class OrderPaymentScreen extends StatelessWidget {
+class OrderPaymentScreen extends StatefulWidget {
+  String orderId;
+  OrderPaymentScreen({this.orderId});
+  @override
+  _OrderPaymentScreenState createState() => _OrderPaymentScreenState();
+}
+
+class _OrderPaymentScreenState extends State<OrderPaymentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -2,6 +2,7 @@ import 'package:couries_one/configs/constants/app_constants.dart';
 import 'package:couries_one/configs/styles/app_colors.dart';
 import 'package:couries_one/configs/styles/app_decor.dart';
 import 'package:couries_one/controllers/location/location_controller.dart';
+import 'package:couries_one/controllers/recipient.dart';
 import 'package:couries_one/views/home/parcel/place_order_view.dart';
 import 'package:couries_one/widgets/custom_app_bar.dart';
 import 'package:couries_one/widgets/custom_text_field.dart';
@@ -22,6 +23,7 @@ class AddLocationScreen extends StatefulWidget {
 }
 
 class _AddLocationScreenState extends State<AddLocationScreen> {
+  final RecipientController _recipientController = Get.put(RecipientController());
   GoogleMapController _mapController;
   String searchAddr;
   String location;
@@ -175,7 +177,19 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
 
   _handleTap(LatLng tappedPoint)async{
     location = 'Lat: ${tappedPoint.latitude}, Long: ${tappedPoint.longitude}';
+
     GetAddressFromLatLong(tappedPoint);
+    print(tappedPoint.latitude);
+    print(tappedPoint.longitude);
+    if(widget.index == 1){
+      _recipientController.pickupLat.value = tappedPoint.latitude.toString();
+      _recipientController.pickupLong.value = tappedPoint.longitude.toString();
+    }
+    else{
+      _recipientController.dropLat.value = tappedPoint.latitude.toString();
+      _recipientController.dropLong.value = tappedPoint.longitude.toString();
+    }
+
     print(location);
     setState(() {
       myMarker = [];

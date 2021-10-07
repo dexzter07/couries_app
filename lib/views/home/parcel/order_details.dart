@@ -2,21 +2,41 @@ import 'package:couries_one/configs/constants/app_constants.dart';
 import 'package:couries_one/configs/styles/app_colors.dart';
 import 'package:couries_one/configs/styles/app_decor.dart';
 import 'package:couries_one/configs/styles/custom_text_style.dart';
+import 'package:couries_one/controllers/recipient.dart';
 import 'package:couries_one/views/home/parcel/order_payment_view.dart';
 import 'package:couries_one/widgets/custom_app_bar.dart';
 import 'package:couries_one/widgets/custom_text_widget.dart';
 import 'package:couries_one/widgets/full_width_button.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 
-class OrderDetailsScreen extends StatelessWidget {
+class OrderDetailsScreen extends StatefulWidget {
+  String pickup;
+  String dest;
+  DateTime selectedDate;
+  DateTime selectedDate1;
+  String size;
+  TextEditingController name;
+  TextEditingController email;
+  TextEditingController location;
+
+
+  OrderDetailsScreen({this.pickup,this.dest,this.selectedDate,this.selectedDate1,this.size,this.name,this.email,this.location});
+  @override
+  _OrderDetailsScreenState createState() => _OrderDetailsScreenState();
+}
+
+class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
+  RecipientController _recipientController = Get.put(RecipientController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.PrimaryColor,
       body: SafeArea(
-        child: Column(
+        child: Obx(() =>  Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
@@ -29,7 +49,9 @@ class OrderDetailsScreen extends StatelessWidget {
                     borderRadius: ContainerDecor.BorderRadius1
                 ),
                 padding:  AppConstants.screenPadding,
-                child: ListView(
+                child: _recipientController.isLoading.value==true? Center(
+                  child: CircularProgressIndicator(),
+                ): ListView(
                   shrinkWrap: true,
                   children: [
                     Container(
@@ -45,9 +67,9 @@ class OrderDetailsScreen extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CustomTextWidget(" 2021",style: CustomTextStyle.smallBoldTextStyle1(color: Colors.white,),),
+                              CustomTextWidget(widget.selectedDate.year.toString(),style: CustomTextStyle.smallBoldTextStyle1(color: Colors.white,),),
                               SizedBox(height:2),
-                              CustomTextWidget("Fri, Feb 12",style: CustomTextStyle.boldTextStyle(color: Colors.white),),
+                              CustomTextWidget("${widget.selectedDate.day}/${widget.selectedDate.month}/${widget.selectedDate.year} ",style: CustomTextStyle.boldTextStyle(color: Colors.white),),
                               SizedBox(height: 5,),
                               CustomTextWidget("11:12 PM",style: CustomTextStyle.boldTextStyle(color: Colors.white),)
                             ],
@@ -57,21 +79,21 @@ class OrderDetailsScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 30,),
 
-                    Row(
-                      children: [
-                        Container(height:15,width: 15, child: Icon(Icons.circle,color: Colors.grey,size: 15,)),
-                        SizedBox(width: 8,),
-                        CustomTextWidget("Shar Tau Tok",style:  CustomTextStyle.smallTextStyle1(color: Colors.grey),)
-                      ],
-                    ),
-                    SizedBox(height: 10,),
-                    Row(
-                      children: [
-                        Container(height:15,width: 15,child:Image.asset("assets/images/location1.png")),
-                        SizedBox(width: 8,),
-                        CustomTextWidget("Fanling",style:  CustomTextStyle.smallTextStyle1(color: Colors.grey))
-                      ],
-                    ),
+                    // Row(
+                    //   children: [
+                    //     Container(height:15,width: 15, child: Icon(Icons.circle,color: Colors.grey,size: 15,)),
+                    //     SizedBox(width: 8,),
+                    //     CustomTextWidget("Shar Tau Tok",style:  CustomTextStyle.smallTextStyle1(color: Colors.grey),)
+                    //   ],
+                    // ),
+                    // SizedBox(height: 10,),
+                    // Row(
+                    //   children: [
+                    //     Container(height:15,width: 15,child:Image.asset("assets/images/location1.png")),
+                    //     SizedBox(width: 8,),
+                    //     CustomTextWidget("Fanling",style:  CustomTextStyle.smallTextStyle1(color: Colors.grey))
+                    //   ],
+                    // ),
 
                     SizedBox(height: 20,),
                     Container(
@@ -96,22 +118,23 @@ class OrderDetailsScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 10,),
 
-                          CustomTextWidget("Himalayan Das",style: CustomTextStyle.ultraSmallTextStyle(),),
+
+                          CustomTextWidget(widget.name.text,style: CustomTextStyle.ultraSmallTextStyle(),),
                           SizedBox(height: 3,),
                           SizedBox(height: 3,),
-                          CustomTextWidget("1+ 00000 00000",style: CustomTextStyle.ultraSmallTextStyle(),),
+                          CustomTextWidget(widget.email.text,style: CustomTextStyle.ultraSmallTextStyle(),),
                           SizedBox(height: 3,),
-                          CustomTextWidget("A Block 2nd flow Room 251",style: CustomTextStyle.ultraSmallTextStyle(),)
+                          CustomTextWidget(widget.location.text,style: CustomTextStyle.ultraSmallTextStyle(),)
                         ],
                       ),
                     ),
                     SizedBox(height: 20,),
 
-                    CustomAddlocationWidget(icon: Icon(Icons.circle,color: AppColors.PrimaryColor,size: 20,),location: "   24, Ocean avenue",),
+                    CustomAddlocationWidget(icon: Icon(Icons.circle,color: AppColors.PrimaryColor,size: 20,),location: widget.pickup,),
                     Align(
                         alignment: Alignment.centerLeft,
                         child: Container(height: 20,width: 1,color: Colors.black,margin: EdgeInsets.only(left:30),)),
-                    CustomAddlocationWidget(icon: Icon(Icons.arrow_drop_down,color: Colors.black,size: 30,),location: "GH, 15 NY,USA",),
+                    CustomAddlocationWidget(icon: Icon(Icons.arrow_drop_down,color: Colors.black,size: 30,),location: widget.dest,),
                     SizedBox(height: 30,),
 
 
@@ -135,9 +158,10 @@ class OrderDetailsScreen extends StatelessWidget {
                     SizedBox(height: 20,),
                     FullWidthButtonWithIcon(
                       title: "Next",
-                      onTap: (){
-                        FocusScope.of(context).unfocus();
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => OrderPaymentScreen()));
+                      onTap: () async{
+                        await _recipientController.placeOrder();
+                        // FocusScope.of(context).unfocus();
+                        // Navigator.of(context).push(MaterialPageRoute(builder: (context) => OrderPaymentScreen()));
                         },
                     )
                   ],
@@ -147,6 +171,7 @@ class OrderDetailsScreen extends StatelessWidget {
 
           ],
         ),
+        )
       ),
     );
   }

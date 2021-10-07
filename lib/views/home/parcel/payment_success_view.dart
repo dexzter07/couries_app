@@ -9,6 +9,8 @@ import 'package:couries_one/widgets/full_width_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'order_details_after_order.dart';
+
 
 class PaymentSuccessScreen extends StatelessWidget {
 
@@ -42,7 +44,7 @@ class PaymentSuccessScreen extends StatelessWidget {
                         title: "Order Details",
                         borderRadius: BorderRadius.circular(15),
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder:(context){return OrderDetailsScreen();}));
+                          Navigator.push(context, MaterialPageRoute(builder:(context){return OrderDetailsAfterOrder();}));
                         },
                       ),
                     )

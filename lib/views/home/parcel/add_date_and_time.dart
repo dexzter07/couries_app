@@ -2,6 +2,7 @@ import 'package:couries_one/configs/constants/app_constants.dart';
 import 'package:couries_one/configs/styles/app_colors.dart';
 import 'package:couries_one/configs/styles/app_decor.dart';
 import 'package:couries_one/configs/styles/custom_text_style.dart';
+import 'package:couries_one/controllers/recipient.dart';
 import 'package:couries_one/views/home/parcel/order_size.dart';
 import 'package:couries_one/widgets/custom_app_bar.dart';
 import 'package:couries_one/widgets/custom_text_widget.dart';
@@ -20,9 +21,10 @@ class AddDateTimeScreen extends StatefulWidget {
 }
 
 class _AddDateTimeScreenState extends State<AddDateTimeScreen> {
+  RecipientController _recipientController = Get.put(RecipientController());
+
   DateTime _selectedValue;
   DateTime _selectedValue1;
-
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +70,7 @@ class _AddDateTimeScreenState extends State<AddDateTimeScreen> {
                             // New date selected
                             setState(() {
                               _selectedValue1 = date;
+                              _recipientController.pickupDate.value = _selectedValue1.toString();
                               print(_selectedValue1);
                             });
                           },
@@ -107,9 +110,11 @@ class _AddDateTimeScreenState extends State<AddDateTimeScreen> {
                           selectionColor: Colors.blue,
                           selectedTextColor: Colors.white,
                           onDateChange: (date) {
+
                             // New date selected
                             setState(() {
                               _selectedValue = date;
+                              _recipientController.dropDate.value = _selectedValue.toString();
                               print(_selectedValue);
                             });
                           },
@@ -138,7 +143,7 @@ class _AddDateTimeScreenState extends State<AddDateTimeScreen> {
               child: FullWidthButtonWithIcon(
                 title: "Next",
                 onTap: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => OrderSizeScreen()));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => OrderSizeScreen(pickup:widget.pickup,dest:widget.dest,selectedDate:_selectedValue,selectedDate1:_selectedValue1)));
                 },
               ),
             ),

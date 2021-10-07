@@ -18,8 +18,11 @@ dependencies:
   cupertino_icons: ^1.0.0
   geolocator:
   geocoding:
+  google_map_polyline:
   google_maps_flutter:
   date_picker_timeline:
+  http:
+  permission_handler:
 
 dev_dependencies:
   flutter_test:

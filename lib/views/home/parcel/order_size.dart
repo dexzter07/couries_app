@@ -3,6 +3,7 @@ import 'package:couries_one/configs/constants/app_constants.dart';
 import 'package:couries_one/configs/styles/app_colors.dart';
 import 'package:couries_one/configs/styles/app_decor.dart';
 import 'package:couries_one/configs/styles/custom_text_style.dart';
+import 'package:couries_one/controllers/recipient.dart';
 import 'package:couries_one/models/home/order_details_model.dart';
 import 'package:couries_one/views/home/parcel/recipient.dart';
 import 'package:couries_one/widgets/custom_app_bar.dart';
@@ -13,6 +14,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class OrderSizeScreen extends StatelessWidget {
+  String pickup;
+  String dest;
+  DateTime selectedDate;
+  DateTime selectedDate1;
+
+  OrderSizeScreen({this.pickup,this.dest,this.selectedDate,this.selectedDate1});
 
   final List <ParcelAndCourierModel> _orderSizeDetails = [
     ParcelAndCourierModel(imageUrl: "assets/images/order1.png",title1: "Small",title2: "Max. 25 kg, 8 x 38 x 64 cm",title3: "Fits in an envelope"),
@@ -55,7 +62,10 @@ class OrderSizeScreen extends StatelessWidget {
               child: FullWidthButtonWithIcon(
                 title: "Next",
                 onTap: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) =>RecipientScreen()));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) =>RecipientScreen(
+                    pickup:pickup,dest:dest,selectedDate:selectedDate,selectedDate1:selectedDate1,size:"small",)
+
+                  ));
                   },
               ),
             )
@@ -79,13 +89,14 @@ class OrderSizeWidget extends StatefulWidget {
 }
 
 class _OrderSizeWidgetState extends State<OrderSizeWidget> {
-
+  RecipientController _recipientController = Get.put(RecipientController());
   bool _isSelected = false ;
 
   @override
   Widget build(BuildContext context) {
     return CustomInkWell(
       onTap: (){
+        _recipientController.orderSize.value = widget.parcelAndCourierModel.title1;
         setState(() {
            _isSelected = ! _isSelected;
         });

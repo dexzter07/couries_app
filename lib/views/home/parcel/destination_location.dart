@@ -1,6 +1,7 @@
 import 'package:couries_one/configs/constants/app_constants.dart';
 import 'package:couries_one/configs/styles/app_colors.dart';
 import 'package:couries_one/configs/styles/app_decor.dart';
+import 'package:couries_one/controllers/recipient.dart';
 import 'package:couries_one/views/home/parcel/place_order_view.dart';
 import 'package:couries_one/widgets/custom_app_bar.dart';
 import 'package:couries_one/widgets/custom_text_field.dart';
@@ -20,6 +21,9 @@ class DestinationLocation extends StatefulWidget {
 }
 
 class _DestinationLocationState extends State<DestinationLocation> {
+
+  final RecipientController _recipientController = Get.put(RecipientController());
+
   GoogleMapController _mapController;
   String searchAddr;
   String location;
@@ -162,15 +166,20 @@ class _DestinationLocationState extends State<DestinationLocation> {
       _mapController = controller;
     });
   }
-  _handleTap(LatLng tappedPoint)async{
-    location = 'Lat: ${tappedPoint.latitude}, Long: ${tappedPoint.longitude}';
-    GetAddressFromLatLong(tappedPoint);
+  _handleTap(LatLng tappedPoint1)async{
+    location = 'Lat: ${tappedPoint1.latitude}, Long: ${tappedPoint1.longitude}';
+
+    GetAddressFromLatLong(tappedPoint1);
+    print(tappedPoint1.latitude);
+    print(tappedPoint1.longitude);
+    _recipientController.dropLat.value = tappedPoint1.latitude.toString();
+    _recipientController.dropLong.value = tappedPoint1.longitude.toString();
     print(location);
     setState(() {
       myMarker = [];
       myMarker.add(
-          Marker(markerId: MarkerId(tappedPoint.toString()),
-              position: tappedPoint,
+          Marker(markerId: MarkerId(tappedPoint1.toString()),
+              position: tappedPoint1,
               draggable: true,
               onDragEnd: (dragEndPosition){
                 print(dragEndPosition);
